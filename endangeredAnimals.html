@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endangered Animals</title>
+    <style>
+            body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .animal-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .animal-list li {
+            width: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .animal-list li:hover {
+            transform: translateY(-5px);
+        }
+        .animal-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        .animal-info {
+            padding: 10px;
+            background-color: #fff;
+        }
+        #animalInfo {
+            text-align: center;
+            display: none;
+        }
+        #animalInfo img {
+            max-width: 100%;
+            height: auto;
+        }
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Endangered Animals</h1>
+    <ul class="animal-list">
+        <li onclick="showAnimalInfo('tiger')">
+            <img src="https://cdn.britannica.com/83/195983-138-66807699/numbers-tiger-populations.jpg?w=800&h=450&c=crop" alt="Tiger" class="animal-image">
+            <div class="animal-info">
+                <h3>Tiger</h3>
+                <p>The tiger (Panthera tigris) is the largest cat species, most recognizable for its pattern of dark vertical stripes on orange fur with a lighter underside.</p>
+            </div>
+        </li>
+        <li onclick="showAnimalInfo('panda')">
+            <img src="https://img-s2.onedio.com/id-5526ada47e940ad32017e551/rev-0/raw/s-8796437f805181036e436e2a839ad4bb76153012.jpg" alt="Panda" class="animal-image">
+            <div class="animal-info">
+                <h3>Panda</h3>
+                <p>The giant panda (Ailuropoda melanoleuca) is a bear species native to South Central China. It is easily recognized by its large, distinctive black patches around the eyes, over the ears, and across its round body.</p>
+            </div>
+        </li>
+        <li onclick="showAnimalInfo('elephant')">
+            <img src="https://cdn.britannica.com/02/152302-050-1A984FCB/African-savanna-elephant.jpg" alt="Elephant" class="animal-image">
+            <div class="animal-info">
+                <h3>Elephant</h3>
+                <p>The elephant is the largest land animal on Earth. There are two species: the African elephant and the Asian elephant. Both species are threatened by habitat loss, poaching, and human-wildlife conflict.</p>
+            </div>
+        </li>
+    </ul>
+
+    <div id="animalInfo">
+        <h2 id="animalName"></h2>
+        <p id="animalDescription"></p>
+        <button onclick="donate()">Donate</button>
+    </div>
+
+    <div class="lightbox" onclick="hideLightbox()">
+        <img src="" alt="Enlarged Image">
+    </div>
+    <button onClick="donate()">Donate</button>
+    <script>
+        function showAnimalInfo(animal) {
+            var animalName = "";
+            var animalDescription = "";
+
+            switch (animal) {
+                case "tiger":
+                    animalName = "Tiger";
+                    animalDescription = "The tiger (Panthera tigris) is the largest cat species, most recognizable for its pattern of dark vertical stripes on orange fur with a lighter underside.";
+                    break;
+                case "panda":
+                    animalName = "Panda";
+                    animalDescription = "The giant panda (Ailuropoda melanoleuca) is a bear species native to South Central China. It is easily recognized by its large, distinctive black patches around the eyes, over the ears, and across its round body.";
+                    break;
+                case "elephant":
+                    animalName = "Elephant";
+                    animalDescription = "The elephant is the largest land animal on Earth. There are two species: the African elephant and the Asian elephant. Both species are threatened by habitat loss, poaching, and human-wildlife conflict.";
+                    break;
+            }
+
+            document.getElementById("animalName").textContent = animalName;
+            document.getElementById("animalDescription").textContent = animalDescription;
+            document.getElementById("animalInfo").style.display = "block";
+        }
+
+        function donate() {
+            var animalName = document.getElementById("animalName").textContent;
+            var donationAmount = prompt("Enter the donation amount for " + animalName + ":");
+            if (donationAmount !== null && !isNaN(donationAmount) && donationAmount > 0) {
+                alert("Thank you for your donation of $" + donationAmount + " for " + animalName + " conservation efforts!");
+            } else {
+                alert("Invalid donation amount. Please enter a valid number.");
+            }
+        }
+
+        function hideLightbox() {
+            document.querySelector('.lightbox').style.display = 'none';
+        }
+
+        var animalImages = document.querySelectorAll('.animal-image');
+        animalImages.forEach(function(image) {
+            image.addEventListener('click', function() {
+                var lightboxImage = document.querySelector('.lightbox img');
+                lightboxImage.src = this.src;
+                document.querySelector('.lightbox').style.display = 'flex';
+            });
+        });
+
+        const desteklenenOdemeYontemleri = [{
+            supportedMethods: ['basic-card']
+        }];
+        const odemeDetaylari = {
+            total: {
+                label: 'Toplam',
+                amount: {
+                    currency: 'TRY',
+                    value: 100
+                }
+            }
+        };
+        const request = new PaymentRequest(desteklenenOdemeYontemleri, odemeDetaylari);
+
+        function donate() {
+            // Ödeme ekranını göster ve ilgili ödeme bilgilerinin doldurulmasını bekle
+            request.show().then(function(paymentResponse) {
+                // Ödemeyi tamamla
+                return paymentResponse.complete();
+            }).then(function() {
+                // Ödeme bilgilerini bankaya ilet 
+                console.log(paymentResponse.details); // CC #, ad, güvenlik kodu, son kullanım tarihi vb.
+                var animalName = document.getElementById("animalName").textContent;
+                alert("Thank you for your donation for " + animalName + " conservation efforts!");
+            }).catch(function(error) {
+                console.error('Payment Request Error:', error);
+                alert("An error occurred during payment processing. Please try again later.");
+            });
+        }
+    </script>
+</body>
+</html>
